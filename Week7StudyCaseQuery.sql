@@ -145,7 +145,16 @@ UPDATE Payment
 SET PaymentStatus = 'DONE'
 WHERE PaymentID = 'PM002'
 
---DELETE
+UPDATE Customer
+SET Instagram = 'jennieblackpink'
+WHERE CustID = 'CR003'
 
+-- DELETE
+DELETE FROM Payment 
+WHERE PaymentStatus = 'DONE'
 
+DELETE FROM PortfolioAlbum
+WHERE MONTH(CreatedDate) BETWEEN '2' AND '5'
+
+-- UNION
 
