@@ -157,7 +157,23 @@ DELETE FROM PortfolioAlbum
 WHERE MONTH(CreatedDate) BETWEEN '2' AND '5'
 
 --Combining Multiple tables
+
 -- UNION
+SELECT PhotographerName AS NAMA, PhotographerID AS KODE 
+FROM Photographer 
+WHERE PhotographerID LIKE '%2'
+UNION
+SELECT CustName AS NAMA , CustID AS KODE 
+FROM Customer
+WHERE CustID LIKE '%2'
+
+--Menyaring Pembayaran yang berjumlah lebih dari 5 juta Rupiah, dan diurutkan dari pembayaran terbesar (DESC)
+SELECT PaymentMethod AS MetodePembayaran, SUM(AmmountofPayment) AS JumlahPembayaran
+FROM Payment
+GROUP BY PaymentMethod, AmmountofPayment
+HAVING SUM(AmmountofPayment) > 5000000
+ORDER BY JumlahPembayaran DESC
+
 
 -- JOIN
 --Menampilkan PhotographerID, PaymentStatus, BookingDate, dan PaymentDate dengan bulan Sebelum June dan diurutkan secara ASC 
@@ -166,3 +182,10 @@ FROM Transactions x JOIN Payment y
 ON x.TransactionID = y.TransactionID
 WHERE (MONTH (y.PaymentDate) < 6)
 ORDER BY MONTH (y.PaymentDate)
+
+--Menampilkan column nama, id photographer dan CustID, Locations yang berasal dari tabel Photographer dan Transaction dengan Location berada di tangerang atau tanggerang selatan dan mengurutkan nama photographer secara descending
+SELECT t1.PhotographerID, t1.PhotographerName, t2.CustID, t2.Locations 
+FROM Photographer t1 INNER JOIN Transactions t2
+ON t1.PhotographerID = t2.PhotographerID
+WHERE Locations='Tangerang Selatan' OR Locations='Tangerang'
+ORDER BY (t1.PhotographerID) DESC
