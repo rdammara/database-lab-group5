@@ -156,5 +156,13 @@ WHERE PaymentStatus = 'DONE'
 DELETE FROM PortfolioAlbum
 WHERE MONTH(CreatedDate) BETWEEN '2' AND '5'
 
+--Combining Multiple tables
 -- UNION
 
+-- JOIN
+--Menampilkan PhotographerID, PaymentStatus, BookingDate, dan PaymentDate dengan bulan Sebelum June dan diurutkan secara ASC 
+SELECT x.PhotographerID, x.BookingDate, y.PaymentDate, y.PaymentStatus
+FROM Transactions x JOIN Payment y
+ON x.TransactionID = y.TransactionID
+WHERE (MONTH (y.PaymentDate) < 6)
+ORDER BY MONTH (y.PaymentDate)
