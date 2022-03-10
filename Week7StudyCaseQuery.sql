@@ -1,5 +1,14 @@
+--Kelompok 5
+--Albert Richard Dammara (00000061865)
+--Arlynandhita Felisya Putri Wibowo (00000061610)
+--Alejandro Lodewjik (00000061302)
+--Andreas Kendy Stevanus (00000061700)
+--Muhammad Fikri Riyadi (00000061231)
+--Steven Tandiono Marcelino (00000059949)
+
 CREATE DATABASE WEEK7STUDYCASE
 USE WEEK7STUDYCASE
+
 
 
 CREATE TABLE Bank
@@ -157,7 +166,19 @@ DELETE FROM PortfolioAlbum
 WHERE MONTH(CreatedDate) BETWEEN '2' AND '5'
 
 --Combining Multiple tables
+
 -- UNION
+--Mengambil data dari kedua tabel kemudian memfilter nya menggunakan LIKE
+SELECT PhotographerName AS NAMA, PhotographerID AS KODE 
+FROM Photographer 
+WHERE PhotographerID LIKE '%2'
+UNION
+SELECT CustName AS NAMA , CustID AS KODE 
+FROM Customer
+WHERE CustID LIKE '%2'
+
+
+
 
 -- JOIN
 --Menampilkan PhotographerID, PaymentStatus, BookingDate, dan PaymentDate dengan bulan Sebelum June dan diurutkan secara ASC 
@@ -166,3 +187,30 @@ FROM Transactions x JOIN Payment y
 ON x.TransactionID = y.TransactionID
 WHERE (MONTH (y.PaymentDate) < 6)
 ORDER BY MONTH (y.PaymentDate)
+
+--Menampilkan column nama, id photographer dan CustID, Locations yang berasal dari tabel Photographer dan Transaction dengan Location berada di tangerang atau tanggerang selatan dan mengurutkan nama photographer secara descending
+SELECT t1.PhotographerID, t1.PhotographerName, t2.CustID, t2.Locations 
+FROM Photographer t1 INNER JOIN Transactions t2
+ON t1.PhotographerID = t2.PhotographerID
+WHERE Locations='Tangerang Selatan' OR Locations='Tangerang'
+ORDER BY (t1.PhotographerID) DESC
+
+--Menampilkan nama Pelanggan, ID Fotografer, Tanggal Event, dan Lokasi dari tabel Customer dan Transactions
+SELECT CustName, PhotographerID, EventDate, Locations
+FROM Customer
+JOIN Transactions
+ON PhotographerID = PhotographerID
+WHERE YEAR (EventDate) > 2021
+
+--Menampilkan TransactionID, jumlah pembayaran, payment status dengan jumlah lebih dari 5000000
+SELECT c.TransactionID, d.AmmountofPayment, d.PaymentStatus
+FROM Transactions c
+LEFT JOIN Payment d
+ON c.TransactionID = d.TransactionID
+INNER JOIN (
+    SELECT d.AmmountofPayment
+    FROM Payment d
+    GROUP BY AmmountofPayment
+    HAVING SUM(AmmountofPayment) > 5000000
+) _cc
+ON d.AmmountofPayment = _cc.AmmountofPayment
